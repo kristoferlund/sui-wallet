@@ -1,14 +1,29 @@
-import { CircleAlert } from 'lucide-react';
+import { InfoIcon } from 'lucide-react';
 import { Alert, AlertDescription } from './ui/alert';
 
 export default function WalletWarning() {
   return (
-    <Alert variant="destructive" className="w-[400px] mb-5">
-      <CircleAlert className="w-4 h-4" />
+    <Alert className="w-[400px] mb-5">
+
+      <InfoIcon className="w-4 h-4" />
       <AlertDescription>
-        This is an example application using real Bitcoin transactions. Your
-        funds are not safe here. Please use only minimal amounts when testing.
+        <div className="flex flex-col gap-2">
+          This is an example application, a multiuser Sui wallet on the
+          Internet Computer (ICP).
+          <div className="flex items-center gap-2">
+            Source code:
+            <a
+              href="http://github.com/kristoferlund/bitcoin_wallet"
+              className="underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              sui_wallet
+            </a>
+          </div>
+        </div>
       </AlertDescription>
     </Alert>
+
   );
 }

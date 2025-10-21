@@ -4,7 +4,7 @@ import { useInternetIdentity } from "ic-use-internet-identity";
 import { useBackendActor } from "@/main";
 
 export default function useBtcAddress() {
-  const { actor: backend } = useBackendActor();
+  const { actor: backend, isAuthenticated } = useBackendActor();
   const { handleAgentError } = useHandleAgentError();
   const { identity } = useInternetIdentity();
   const principal = identity?.getPrincipal();
@@ -49,6 +49,6 @@ export default function useBtcAddress() {
         throw new Error("Invalid address returned.");
       }
     },
-    enabled: !!backend && !!principal,
+    enabled: !!backend && !!isAuthenticated,
   });
 }

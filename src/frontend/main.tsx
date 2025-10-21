@@ -12,6 +12,7 @@ import {
   canisterId,
   idlFactory,
 } from "../backend/declarations/index"
+import AuthGuard from './AuthGuard.tsx'
 
 // Mimimize reloading of queries
 export const queryClient = new QueryClient({
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
             : "https://identity.ic0.app"
         }}
       >
+        <AuthGuard />
         <App />
       </InternetIdentityProvider>
     </QueryClientProvider>

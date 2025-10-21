@@ -30,13 +30,13 @@ export default function SendButton() {
       if (!backend) {
         throw new Error('backend actor not initialized');
       }
-      try {
-        return await backend.send_btc(to, BigInt(amount));
-      } catch (e) {
-        handleAgentError(e);
-        console.error(e);
-        throw e;
-      }
+      // try {
+      //   return await backend.send_btc(to, BigInt(amount));
+      // } catch (e) {
+      //   handleAgentError(e);
+      //   console.error(e);
+      //   throw e;
+      // }
     },
   });
 

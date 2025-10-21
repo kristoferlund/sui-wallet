@@ -1,9 +1,8 @@
 import ReceiveButton from './receive-button';
 import SendButton from './send-button';
 import { BtcAddress } from './btc-address';
-import { Balance } from './balance';
 import Logout from './logout';
-import { Bitcoin } from 'lucide-react';
+import suiLogo from "../assets/sui.svg";
 
 export default function Wallet() {
   return (
@@ -11,7 +10,7 @@ export default function Wallet() {
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <div className="rounded-full bg-primary p-1">
-            <Bitcoin />
+            <img src={suiLogo} className='w-5 h-5' />
           </div>
           <h3>Wallet</h3>
         </div>
@@ -22,7 +21,6 @@ export default function Wallet() {
         <BtcAddress />
       </div>
 
-      <Balance />
       <div className="flex gap-5">
         <ReceiveButton />
         <SendButton />

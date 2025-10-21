@@ -1,81 +1,49 @@
-mod btc;
-mod p2tr;
-mod schnorr;
 mod service;
 
-use btc::BitcoinContext;
 use candid::Principal;
-use ic_cdk::export_candid;
-use ic_cdk::{bitcoin_canister::Network, init, post_upgrade};
+use ic_cdk::api::msg_caller;
+use ic_cdk::{
+    export_candid,
+    management_canister::{EcdsaCurve, EcdsaKeyId},
+    trap,
+};
+use serde_bytes::ByteBuf;
 
-use std::cell::Cell;
-
-fn auth_guard() -> Result<(), String> {
-    match ic_cdk::api::msg_caller() {
-        caller if caller == Principal::anonymous() => {
-            Err("Calls with the anonymous principal are not allowed.".to_string())
-        }
-        _ => Ok(()),
+/// Ensures that the caller is authenticated (not anonymous).
+pub fn ensure_authenticated() -> Result<(), String> {
+    if msg_caller() == Principal::anonymous() {
+        Err("Anonymous principal not allowed to make calls.".into())
+    } else {
+        Ok(())
     }
 }
 
-// Global, thread-local instance of the Bitcoin context.
-// This is initialized at smart contract init/upgrade time and reused across all API calls.
-thread_local! {
-    static BTC_CONTEXT: Cell<BitcoinContext> = const {
-        Cell::new(BitcoinContext {
-            network: Network::Testnet,
-            bitcoin_network: bitcoin::Network::Testnet,
-            key_name: "test_key_1",
-        })
-    };
+// ICP uses different ECDSA key names for mainnet and local
+// development.
+fn get_ecdsa_key_id() -> EcdsaKeyId {
+    #[allow(clippy::option_env_unwrap)]
+    let dfx_network = option_env!("DFX_NETWORK").unwrap();
+    EcdsaKeyId {
+        curve: EcdsaCurve::Secp256k1,
+        name: match dfx_network {
+            "local" => "dfx_test_key".to_string(),
+            "ic" => "key_1".to_string(),
+            _ => trap("Invalid dfx_network"),
+        },
+    }
 }
 
-/// Internal shared init logic used both by init and post-upgrade hooks.
-fn init_upgrade(network: Network) {
-    let key_name = match network {
-        Network::Regtest => "dfx_test_key",
-        Network::Mainnet | Network::Testnet => "test_key_1",
-    };
-
-    let bitcoin_network = match network {
-        Network::Mainnet => bitcoin::Network::Bitcoin,
-        Network::Testnet => bitcoin::Network::Testnet,
-        Network::Regtest => bitcoin::Network::Regtest,
-    };
-
-    BTC_CONTEXT.with(|ctx| {
-        ctx.set(BitcoinContext {
-            network,
-            bitcoin_network,
-            key_name,
-        })
-    });
+// The derivation path determines the Ethereum address generated
+// by the signer.
+fn create_derivation_path(principal: &Principal) -> Vec<Vec<u8>> {
+    const SCHEMA_V1: u8 = 1;
+    [
+        ByteBuf::from(vec![SCHEMA_V1]),
+        ByteBuf::from(principal.as_slice().to_vec()),
+    ]
+    .iter()
+    .map(|x| x.to_vec())
+    .collect()
 }
-
-/// Smart contract init hook.
-/// Sets up the BitcoinContext based on the given IC Bitcoin network.
-#[init]
-pub fn init(network: Network) {
-    init_upgrade(network);
-}
-
-/// Post-upgrade hook.
-/// Reinitializes the BitcoinContext with the same logic as `init`.
-#[post_upgrade]
-fn upgrade(network: Network) {
-    init_upgrade(network);
-}
-
-/// Input structure for sending Bitcoin.
-/// Used across P2PKH, P2WPKH, and P2TR transfer endpoints.
-#[derive(candid::CandidType, candid::Deserialize)]
-pub struct SendRequest {
-    pub destination_address: String,
-    pub amount_in_satoshi: u64,
-}
-
-// Re-export SendBtcRequest for Candid interface generation
-pub use service::send_btc::SendBtcRequest;
 
 export_candid!();

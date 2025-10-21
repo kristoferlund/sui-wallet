@@ -18,7 +18,7 @@ export function BtcAddress() {
   return (
     <div className="flex gap-1 items-center">
       <a
-        href={`https://mempool.space/address/${address}`}
+        href={`https://suiscan.xyz/mainnet/account/${address}/portfolio`}
         target="_blank"
         rel="noopener noreferrer"
         className="underline"
