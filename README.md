@@ -21,7 +21,7 @@ The frontend is built with React and Vite.
 
 You can try a predeployed versions of the wallet:
 
-Testnet: <https://mcejh-aqaaa-aaaan-qz4la-cai.icp0.io>
+Testnet: <https://ltouy-taaaa-aaaas-qcoca-cai.icp0.io>
 
 ![](./media/screenshot.png)
 

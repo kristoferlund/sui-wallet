@@ -39,7 +39,7 @@ createRoot(document.getElementById('root')!).render(
         loginOptions={{
           identityProvider: process.env.DFX_NETWORK === "local"
             ? `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943`
-            : "https://identity.ic0.app"
+            : "https://id.ai"
         }}
       >
         <AuthGuard />
