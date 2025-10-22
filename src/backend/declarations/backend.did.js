@@ -1,7 +1,13 @@
 export const idlFactory = ({ IDL }) => {
-  const AddressResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : IDL.Text });
+  const PublicKey = IDL.Vec(IDL.Nat8);
+  const PublicKeyResult = IDL.Variant({ 'Ok' : PublicKey, 'Err' : IDL.Text });
+  const BytesResult = IDL.Variant({
+    'Ok' : IDL.Vec(IDL.Nat8),
+    'Err' : IDL.Text,
+  });
   return IDL.Service({
-    'get_address' : IDL.Func([IDL.Opt(IDL.Principal)], [AddressResult], []),
+    'get_public_key' : IDL.Func([], [PublicKeyResult], []),
+    'sign' : IDL.Func([IDL.Vec(IDL.Nat8)], [BytesResult], []),
   });
 };
 export const init = ({ IDL }) => { return []; };

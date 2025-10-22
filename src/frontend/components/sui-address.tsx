@@ -1,10 +1,15 @@
-import useBtcAddress from '@/hooks/useBtcAddress';
+import useSuiAddress from '@/hooks/useSuiAddress';
 import { Copy, Loader2 } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
 import { Button } from './ui/button';
 
-export function BtcAddress() {
-  const { data: address, isPending: isFetchingAddress } = useBtcAddress();
+export function SuiAddress() {
+  const { data: pk, isPending: isFetchingAddress } = useSuiAddress();
+
+  let address;
+  if (pk) {
+    address = pk.toSuiAddress();
+  }
 
   if (isFetchingAddress || !address) {
     return (

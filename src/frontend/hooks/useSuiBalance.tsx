@@ -1,11 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBackendActor } from '@/main';
 import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
-import useBtcAddress from './useBtcAddress';
+import useSuiAddress from './useSuiAddress';
 
-export default function useBtcBalance() {
+export default function useSuiBalance() {
   const { actor: backend, isAuthenticated } = useBackendActor();
-  const { data: address } = useBtcAddress();
+  const { data: pk } = useSuiAddress();
+
+  let address = undefined;
+  if (pk) {
+    address = pk.toSuiAddress();
+  }
 
   return useQuery({
     queryKey: ['balance', address],

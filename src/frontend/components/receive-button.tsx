@@ -7,12 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import useBtcAddress from '@/hooks/useBtcAddress';
+import useSuiAddress from '@/hooks/useSuiAddress';
 import QRCode from 'react-qr-code';
 import { copyToClipboard } from '@/lib/utils';
 
 export default function ReceiveButton() {
-  const { data: address, isPending: isFetchingAddress } = useBtcAddress();
+  const { data: pk, isPending: isFetchingAddress } = useSuiAddress();
+
+  let address;
+  if (pk) {
+    address = pk.toSuiAddress();
+  }
 
   return (
     <Dialog>
@@ -42,9 +47,9 @@ export default function ReceiveButton() {
                   width: '100%',
                   color: 'red',
                 }}
-                value={`bitcoin:${address}`}
+                value={`sui:${address}`}
                 viewBox={`0 0 256 256`}
-                bgColor="#EA580C"
+                bgColor="#4DA2FF"
               />
             </div>
             <code

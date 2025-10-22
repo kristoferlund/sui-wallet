@@ -8,41 +8,26 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from './ui/input';
-import useBtcAddress from '@/hooks/useBtcAddress';
-import { useMutation } from '@tanstack/react-query';
-import useHandleAgentError from '@/hooks/useHandleAgentError';
+import useSuiAddress from '@/hooks/useSuiAddress';
 import SendConfirmation from './send-confirmation';
-import { useBackendActor } from '@/main';
+import useSendSui from '@/hooks/useSendSui';
 
 export default function SendButton() {
-  const { isPending: isFetchingAddress } = useBtcAddress();
-  const { actor: backend } = useBackendActor();
-  const { handleAgentError } = useHandleAgentError();
+  const { isPending: isFetchingAddress } = useSuiAddress();
   const {
-    mutate: sendBtc,
+    mutate: sendSui,
     isPending: isSending,
     isError,
     data: sendResult,
     isIdle,
     reset,
-  } = useMutation({
-    mutationFn: async ({ to, amount }: { to: string; amount: string }) => {
-      if (!backend) {
-        throw new Error('backend actor not initialized');
-      }
-      // try {
-      //   return await backend.send_btc(to, BigInt(amount));
-      // } catch (e) {
-      //   handleAgentError(e);
-      //   console.error(e);
-      //   throw e;
-      // }
-    },
-  });
+  } = useSendSui();
+
+  console.log(sendResult);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    sendBtc({
+    sendSui({
       to: event.currentTarget.toAddress.value,
       amount: event.currentTarget.amount.value,
     });
@@ -91,18 +76,17 @@ export default function SendButton() {
         )}
         {isError && (
           <div className="bg-destructive/30 rounded-lg p-2 text-destructive-foreground">
-            There was an error sending BTC, see browser console for details.
+            There was an error sending SUI, see browser console for details.
           </div>
         )}
-        {sendResult && 'Ok' in sendResult && (
-          <SendConfirmation txId={sendResult.Ok} />
-        )}
-        {sendResult && 'Err' in sendResult && (
-          <div className="flex flex-col gap-2 bg-destructive/30 rounded-lg p-2 text-destructive-foreground">
-            <div>Error, couldn't send.</div>
-            <div>{sendResult.Err}</div>
-          </div>
-        )}
+        {(sendResult && 'digest' in sendResult) ? (
+          <SendConfirmation txId={sendResult.digest} />
+        ) :
+          (
+            <div className="flex flex-col gap-2 bg-destructive/30 rounded-lg p-2 text-destructive-foreground">
+              <div>Error, couldn't send.</div>
+            </div>
+          )}
       </DialogContent>
     </Dialog>
   );

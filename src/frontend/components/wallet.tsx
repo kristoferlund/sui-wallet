@@ -1,6 +1,6 @@
 import ReceiveButton from './receive-button';
 import SendButton from './send-button';
-import { BtcAddress } from './btc-address';
+import { SuiAddress } from './sui-address';
 import Logout from './logout';
 import suiLogo from "../assets/sui.svg";
 import { Balance } from './balance';
@@ -19,7 +19,7 @@ export default function Wallet() {
       </div>
       <div className="flex gap-2 items-center">
         <div className="text-muted-foreground">Your address:</div>
-        <BtcAddress />
+        <SuiAddress />
       </div>
 
       <Balance />

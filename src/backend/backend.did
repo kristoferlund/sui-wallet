@@ -1,5 +1,8 @@
-type AddressResult = variant { Ok : text; Err : text };
+type PublicKey = vec nat8;
+type PublicKeyResult = variant { Ok : PublicKey; Err : text };
+type BytesResult = variant { Ok : vec nat8; Err : text };
 
 service : () -> {
-  get_address : (owner: opt principal) -> (AddressResult);
+  get_public_key : () -> (PublicKeyResult);
+  sign : (msg: vec nat8) -> (BytesResult);
 }

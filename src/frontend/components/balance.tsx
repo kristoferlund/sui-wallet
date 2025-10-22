@@ -1,4 +1,4 @@
-import useBtcBalance from '@/hooks/useBtcBalance';
+import useSuiBalance from '@/hooks/useSuiBalance';
 import { Skeleton } from './ui/skeleton';
 import { formatSui } from '@/lib/sui';
 
@@ -7,7 +7,7 @@ export function Balance() {
     data: balance,
     isPending: isFetchingBalance,
     isError,
-  } = useBtcBalance();
+  } = useSuiBalance();
 
   if (isFetchingBalance) {
     return <Skeleton className="w-full h-14" />;
