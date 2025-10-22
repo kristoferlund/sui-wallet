@@ -1,11 +1,6 @@
 # A multiuser SUI wallet built on the Internet Computer (ICP)
 
-This multiuser Sui wallet allows the user to generate a Sui
-address by logging in with their Internet Identity. The user can then send and receive Sui tokens to other users.
-
-The backend canister uses the [Sui API](https://docs.sui.io/) to interact with the Sui blockchain.
-
-The frontend is built with React and Vite.
+This multiuser Sui wallet allows the user to generate a Sui address by logging in with their Internet Identity. The user can then send and receive Sui tokens to other users.
 
 > [!TIP]
 > Use this repository as a starting point for building your own multiuser Sui wallet on the Internet Computer.
