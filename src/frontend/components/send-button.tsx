@@ -54,13 +54,13 @@ export default function SendButton() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <Input
               type="text"
-              placeholder="To address"
+              placeholder="To SUI address"
               name="toAddress"
               data-1p-ignore
             />
             <Input
               type="text"
-              placeholder="Amount in satoshis"
+              placeholder="Amount in MIST"
               name="amount"
               data-1p-ignore
             />
@@ -81,14 +81,9 @@ export default function SendButton() {
             There was an error sending SUI, see browser console for details.
           </div>
         )}
-        {(sendResult && 'digest' in sendResult) ? (
+        {sendResult && 'digest' in sendResult &&
           <SendConfirmation txId={sendResult.digest} />
-        ) :
-          (
-            <div className="flex flex-col gap-2 bg-destructive/30 rounded-lg p-2 text-destructive-foreground">
-              <div>Error, couldn't send.</div>
-            </div>
-          )}
+        }
       </DialogContent>
     </Dialog>
   );
