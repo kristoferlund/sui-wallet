@@ -3,6 +3,7 @@ import SendButton from './send-button';
 import { BtcAddress } from './btc-address';
 import Logout from './logout';
 import suiLogo from "../assets/sui.svg";
+import { Balance } from './balance';
 
 export default function Wallet() {
   return (
@@ -20,6 +21,8 @@ export default function Wallet() {
         <div className="text-muted-foreground">Your address:</div>
         <BtcAddress />
       </div>
+
+      <Balance />
 
       <div className="flex gap-5">
         <ReceiveButton />

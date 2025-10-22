@@ -16,6 +16,7 @@
     "@dfinity/candid": "^3.3.1",
     "@dfinity/identity": "^3.3.1",
     "@dfinity/principal": "^3.3.1",
+    "@mysten/sui": "^1.43.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.15",

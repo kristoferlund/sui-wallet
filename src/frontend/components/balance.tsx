@@ -1,6 +1,6 @@
 import useBtcBalance from '@/hooks/useBtcBalance';
 import { Skeleton } from './ui/skeleton';
-import { satoshiToDecimal } from '@/lib/btc';
+import { formatSui } from '@/lib/sui';
 
 export function Balance() {
   const {
@@ -23,7 +23,7 @@ export function Balance() {
 
   return (
     <div className="text-4xl font-semibold">
-      {satoshiToDecimal(balance)} BTC
+      {formatSui(balance)} SUI
     </div>
   );
 }

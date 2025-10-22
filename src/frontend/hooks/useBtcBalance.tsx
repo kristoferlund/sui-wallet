@@ -1,41 +1,39 @@
 import { useQuery } from '@tanstack/react-query';
-import useHandleAgentError from './useHandleAgentError';
-import { useInternetIdentity } from 'ic-use-internet-identity';
 import { useBackendActor } from '@/main';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import useBtcAddress from './useBtcAddress';
 
 export default function useBtcBalance() {
-  const { actor: backend } = useBackendActor();
-  const { handleAgentError } = useHandleAgentError();
-  const { identity } = useInternetIdentity();
-  const principal = identity?.getPrincipal();
+  const { actor: backend, isAuthenticated } = useBackendActor();
+  const { data: address } = useBtcAddress();
 
   return useQuery({
-    queryKey: ['balance', principal],
+    queryKey: ['balance', address],
     queryFn: async () => {
-      if (!principal) {
-        throw new Error('Principal is required.');
-      }
-
       try {
-        const result = await backend?.get_balance([principal]);
+        if (!address) throw new Error("Invalid address");
 
-        if (result === undefined) {
-          throw new Error('Undefined balance returned.');
+        // Create a client connected to testnet
+        const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+
+        // Get coins owned by an address
+        const coins = await client.getCoins({
+          owner: address
+        });
+
+        // Currently, we only care about the main SUI coinType
+        for (const coin of coins.data) {
+          if (coin.coinType === "0x2::sui::SUI") {
+            return coin.balance
+          }
         }
 
-        if ('Err' in result) {
-          throw new Error(result.Err);
-        }
-
-        const balance = result.Ok;
-
-        return balance;
+        return "0";
       } catch (e) {
-        handleAgentError(e);
         console.error(e);
-        throw new Error('Invalid balance returned.');
+        throw e;
       }
     },
-    enabled: !!backend && !!principal,
+    enabled: !!backend && !!isAuthenticated && !!address,
   });
 }
