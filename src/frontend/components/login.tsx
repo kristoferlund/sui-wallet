@@ -17,7 +17,7 @@ export default function LoginButton() {
         <div className="rounded-full bg-primary p-1">
           <img src={suiLogo} className='w-5 h-5' />
         </div>
-        <h3>Wallet</h3>
+        <h3>Sui wallet</h3>
       </div>
       <Button onClick={login} disabled={disabled}>
         {text}
