@@ -1,5 +1,5 @@
 
-import useBtcAddress from '@/hooks/useSuiAddress';
+import useSuiAddress from '@/hooks/useSuiAddress';
 import { useMutation } from '@tanstack/react-query';
 import { useBackendActor } from '@/main';
 import { Transaction } from '@mysten/sui/transactions';
@@ -7,7 +7,7 @@ import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
 import { IcpSigner } from '@/lib/sui';
 
 export default function useSendSui() {
-  const { data: pk } = useBtcAddress();
+  const { data: pk } = useSuiAddress();
   const { actor: backend } = useBackendActor();
 
   return useMutation({

@@ -23,7 +23,9 @@ export default function SendButton() {
     reset,
   } = useSendSui();
 
-  console.log(sendResult);
+  if (isError) {
+    console.error(sendResult);
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

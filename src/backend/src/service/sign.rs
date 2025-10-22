@@ -50,13 +50,9 @@ pub async fn sign(msg: Vec<u8>) -> Result<Vec<u8>, String> {
     if msg.len() != 32 {
         return Err(format!("sign expects 32-byte digest, got {}", msg.len()));
     }
-
-    // Step 3: SHA-256 of that 32B digest for ECDSA(secp256k1)
     let msg_sha256 = Sha256::digest(&msg); // 32 bytes
     let mut digest = [0u8; 32];
     digest.copy_from_slice(&msg_sha256);
-
-    // tECDSA sign of the SHA-256 digest
     let mut sig = sign_with_ecdsa(&SignWithEcdsaArgs {
         key_id: get_ecdsa_key_id(),
         derivation_path: create_derivation_path(&msg_caller()),
@@ -65,8 +61,6 @@ pub async fn sign(msg: Vec<u8>) -> Result<Vec<u8>, String> {
     .await
     .map_err(|e| format!("sign_with_ecdsa failed: {e:?}"))?
     .signature; // r||s, 64 bytes
-
-    // Enforce low-S
     normalize_low_s(&mut sig);
     Ok(sig)
 }
