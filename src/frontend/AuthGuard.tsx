@@ -4,15 +4,12 @@ import { useBackendActor } from "./main";
 
 export default function AuthGuard() {
   const { identity } = useInternetIdentity();
-  const { authenticate, reset } = useBackendActor();
+  const { authenticate } = useBackendActor();
 
   useEffect(() => {
-    if (identity) {
-      authenticate(identity);
-      return;
-    }
-    reset();
-  }, [identity, authenticate, reset])
+    if (!identity) return;
+    authenticate(identity);
+  }, [identity, authenticate])
 
   return null;
 }

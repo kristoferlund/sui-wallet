@@ -1,3 +1,4 @@
+use crate::{create_derivation_path, ensure_authenticated, get_ecdsa_key_id};
 use hex_literal::hex;
 use ic_cdk::{
     api::msg_caller,
@@ -5,8 +6,6 @@ use ic_cdk::{
     update,
 };
 use sha2::{Digest as _, Sha256};
-
-use crate::{create_derivation_path, ensure_authenticated, get_ecdsa_key_id};
 
 // secp256k1 constants for low-S normalization
 const N: [u8; 32] = hex!("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141");
