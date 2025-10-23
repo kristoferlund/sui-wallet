@@ -14,23 +14,5 @@ pub async fn get_public_key() -> Result<Vec<u8>, String> {
     })
     .await
     .map_err(|e| format!("ecdsa_public_key failed: {e:?}"))?;
-
     Ok(result.public_key)
-    // let pk = result.public_key; // SEC1 compressed (33 bytes)
-    // if pk.len() != 33 {
-    //     return Err(format!(
-    //         "expected 33-byte compressed pubkey, got {}",
-    //         pk.len()
-    //     ));
-    // }
-    //
-    // // Sui address = blake2b-256( 0x01 || compressed_pubkey )  where 0x01 = secp256k1
-    // let digest = Params::new()
-    //     .hash_length(32)
-    //     .to_state()
-    //     .update(&[0x01])
-    //     .update(&pk)
-    //     .finalize();
-    //
-    // Ok(format!("0x{}", hex::encode(digest.as_bytes())))
 }
